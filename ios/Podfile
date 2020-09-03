@@ -35,5 +35,13 @@ target 'ReactNativeWithSwiftUITutorial' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  use_native_modules!
+use_frameworks!
+# Includes Cards and PayPal
+pod 'Braintree'
+
+# Optionally include additional Pods
+pod 'Braintree/DataCollector'
+pod 'Braintree/Venmo'
+pod 'BraintreeDropIn'
+
 end
