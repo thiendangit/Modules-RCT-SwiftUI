@@ -54,12 +54,10 @@ public class RNPaypal : NSObject, BTViewControllerPresentingDelegate, BTAppSwitc
   var braintreeClient: BTAPIClient!
   @objc(requestOneTimePayment:options:resolver:rejecter:)
   func requestOneTimePayment(clientToken: String, options : [Any], _ resolve: @escaping RCTPromiseResolveBlock, reject: RCTPromiseRejectBlock ) {
-    BTAppSwitch.setReturnURLScheme("org.reactjs.native.example.ReactNativeWithSwiftUITutorial.payments")
-    self.braintreeClient = BTAPIClient(authorization: "sandbox_v29bk2j6_7t2b5cz5s3m5gj8v")
+    self.braintreeClient = BTAPIClient(authorization: clientToken)
     let payPalDriver = BTPayPalDriver(apiClient: self.braintreeClient)
     payPalDriver.viewControllerPresentingDelegate = self
     payPalDriver.appSwitchDelegate = self
-    
     let request = BTPayPalRequest(amount: "1.00")
     
     payPalDriver.requestOneTimePayment(request) { (tokenizedPayPalAccount, error) -> Void in

@@ -10,7 +10,6 @@ import {
     NativeAppEventEmitter,
     View, TouchableOpacity, Text, ActivityIndicator, Dimensions
 } from 'react-native';
-// import {RNPaypal} from "react-native-paytest"
 
 // const SwiftUIButton = requireNativeComponent('SwiftUIButton')
 const {RNPaypal} = NativeModules;
@@ -20,7 +19,6 @@ const App = () => {
     const [spinner, setSpinner] = useState(false);
 
     useEffect(() => {
-        console.log({RNPaypal});
         NativeModules.SwiftReturnName.getName();
         NativeModules.SwiftReturnName.increase();
         NativeModules.SwiftReturnName.getCount((e) => console.log({e}));
@@ -40,10 +38,20 @@ const App = () => {
 
     async function requestOneTimePayment() {
         setSpinner(true);
-        await RNPaypal.requestOneTimePayment('', {}).then(result => {
-            if(!result){
+        await RNPaypal.requestOneTimePayment('sandbox_v29bk2j6_7t2b5cz5s3m5gj8v', {
+            amount: '5', // required
+            // any PayPal supported currency (see here: https://developer.paypal.com/docs/integration/direct/rest/currency-codes/#paypal-account-payments)
+            currency: 'GBP',
+            // any PayPal supported locale (see here: https://braintree.github.io/braintree_ios/Classes/BTPayPalRequest.html#/c:objc(cs)BTPayPalRequest(py)localeCode)
+            localeCode: 'en_GB',
+            shippingAddressRequired: false,
+            userAction: 'commit', // display 'Pay Now' on the PayPal review page
+            // one of 'authorize', 'sale', 'order'. defaults to 'authorize'. see details here: https://developer.paypal.com/docs/api/payments/v1/#payment-create-request-body
+            intent: 'authorize'
+        }).then(result => {
+            if (!result) {
                 alert('Huỷ bỏ!')
-            }else {
+            } else {
                 console.log({result});
                 alert(`Thanh toán thành công với payerId : ${result.payerId}!`)
             }
